@@ -16,7 +16,6 @@ import com.chc.roundmeeting.ui.page.login.LoginPage
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
 import com.chc.roundmeeting.utils.getToken
-import com.chc.roundmeeting.utils.saveToken
 
 private const val AnimationInDuration = 300
 private const val AnimationOutDuration = 300
@@ -38,7 +37,7 @@ fun NavigationGraph(modifier: Modifier = Modifier) {
         navController = navController,
         startDestination = if (sharedPreferences.getToken() == null) LOGIN_PAGE else HOME_PAGE,
     ) {
-        composable(HOME_PAGE) {
+        composable(route = HOME_PAGE) {
             HomePage()
         }
 
