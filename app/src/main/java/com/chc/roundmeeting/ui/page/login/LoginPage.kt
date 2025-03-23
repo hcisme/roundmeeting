@@ -59,7 +59,7 @@ import com.chc.roundmeeting.utils.saveToken
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun LoginPage() {
     val context = LocalContext.current
     val sharedPreferences = LocalSharedPreferences.current
     val navController = LocalNavController.current
@@ -78,7 +78,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
     }
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .systemBarsPadding()

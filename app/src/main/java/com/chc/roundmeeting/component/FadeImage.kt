@@ -15,9 +15,9 @@ import coil3.request.crossfade
 
 @Composable
 fun FadeImage(
-    coverUrl: String?,
-    contentDescription: String?,
     modifier: Modifier = Modifier,
+    coverUrl: String?,
+    contentDescription: String? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
@@ -25,7 +25,7 @@ fun FadeImage(
 ) {
     val context = LocalContext.current
     val image = rememberAsyncImagePainter(
-        ImageRequest
+        model = ImageRequest
             .Builder(context)
             .data(data = coverUrl)
             .crossfade(true)
