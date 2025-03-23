@@ -44,21 +44,5 @@ fun NavigationGraph(modifier: Modifier = Modifier) {
         composable(route = LOGIN_PAGE) {
             LoginPage()
         }
-
-//        composable(
-//            "${MOVIE_PAGE}/{id}",
-//            arguments = listOf(
-//                navArgument("id") {
-//                    type = NavType.StringType
-//                }
-//            ),
-//            enterTransition = { enterTransition },
-//            popEnterTransition = null,
-//            popExitTransition = { exitTransition }
-//        ) {
-//            val id = it.arguments?.getString("id")!!
-//
-//            MoviePage(id = id)
-//        }
     }
 }

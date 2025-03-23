@@ -2,6 +2,7 @@ package com.chc.roundmeeting.ui.page.login
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,22 +16,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -46,11 +51,20 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.chc.roundmeeting.R
+import com.chc.roundmeeting.component.AnimatedLabelText
+import com.chc.roundmeeting.navigationgraph.HOME_PAGE
+import com.chc.roundmeeting.utils.LocalNavController
+import com.chc.roundmeeting.utils.LocalSharedPreferences
+import com.chc.roundmeeting.utils.saveToken
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginPage(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val sharedPreferences = LocalSharedPreferences.current
+    val navController = LocalNavController.current
     val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login_ani))
     val progress by animateLottieCompositionAsState(
         composition,
@@ -58,6 +72,10 @@ fun LoginPage(modifier: Modifier = Modifier) {
         iterations = LottieConstants.IterateForever
     )
     val loginVM = viewModel<LoginViewModel>()
+
+    LaunchedEffect(Unit) {
+        loginVM.getCaptcha()
+    }
 
     Box(
         modifier = modifier
@@ -77,7 +95,9 @@ fun LoginPage(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LottieAnimation(
-                modifier= Modifier.size(200.dp).align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally),
                 composition = composition,
                 progress = { progress },
             )
@@ -95,18 +115,16 @@ fun LoginPage(modifier: Modifier = Modifier) {
                 value = loginVM.email,
                 onValueChange = { loginVM.email = it },
                 label = {
-                    Text(
-                        text = loginVM.emailError.ifEmpty { "邮箱" },
-                        color = if (loginVM.emailError.isNotEmpty()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                    )
+                    AnimatedLabelText(defaultLabel = "邮箱", errorMessage = loginVM.emailError)
                 },
+                singleLine = true,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
                         contentDescription = null
                     )
                 },
-                shape = RoundedCornerShape(8.dp),
+                shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp, horizontal = 20.dp),
@@ -122,11 +140,9 @@ fun LoginPage(modifier: Modifier = Modifier) {
                 value = loginVM.password,
                 onValueChange = { loginVM.password = it },
                 label = {
-                    Text(
-                        text = loginVM.passwordError.ifEmpty { "密码" },
-                        color = if (loginVM.emailError.isNotEmpty()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-                    )
+                    AnimatedLabelText(defaultLabel = "密码", errorMessage = loginVM.passwordError)
                 },
+                singleLine = true,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Lock,
@@ -146,7 +162,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
                         }
                     )
                 },
-                shape = RoundedCornerShape(8.dp),
+                shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp, horizontal = 20.dp),
@@ -156,11 +172,70 @@ fun LoginPage(modifier: Modifier = Modifier) {
                 )
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp, horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextField(
+                    value = loginVM.captcha,
+                    onValueChange = { loginVM.captcha = it },
+                    label = {
+                        AnimatedLabelText(
+                            defaultLabel = "验证码",
+                            errorMessage = loginVM.captchaError
+                        )
+                    },
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    shape = MaterialTheme.shapes.small,
+                    modifier = Modifier.weight(1F)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Surface(
+                    modifier = Modifier
+                        .size(
+                            140.dp,
+                            TextFieldDefaults.MinHeight + 1.dp
+                        ),
+                    shape = MaterialTheme.shapes.small
+                ) {
+                    loginVM.captchaBitmap?.let {
+                        Image(
+                            bitmap = it,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    coroutineScope.launch {
+                                        loginVM.getCaptcha()
+                                    }
+                                },
+                            contentDescription = "验证码图片",
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
-                    loginVM.submit()
+                    sharedPreferences.saveToken("sjioserjq90343r8jf9s")
+                    navController.navigate(HOME_PAGE) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

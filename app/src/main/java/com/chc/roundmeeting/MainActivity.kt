@@ -10,8 +10,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.rememberNavController
 import com.chc.roundmeeting.navigationgraph.NavigationGraph
+import com.chc.roundmeeting.network.Request
 import com.chc.roundmeeting.ui.page.ListenTokenValidity
 import com.chc.roundmeeting.ui.theme.RoundMeetingTheme
+import com.chc.roundmeeting.utils.BASE_URL
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
 
@@ -21,6 +23,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
         val sharedPreferences = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE)
+        Request.init(BASE_URL)
 
         setContent {
             val navController = rememberNavController()
@@ -30,9 +33,9 @@ class MainActivity : ComponentActivity() {
                 LocalSharedPreferences provides sharedPreferences
             ) {
                 RoundMeetingTheme {
-                    ListenTokenValidity()
-
                     NavigationGraph()
+
+                    ListenTokenValidity()
                 }
             }
         }

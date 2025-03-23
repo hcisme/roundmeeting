@@ -22,9 +22,10 @@ fun ListenTokenValidity(modifier: Modifier = Modifier) {
     var dialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        if (sharedPreferences.getToken() != null && sharedPreferences.getToken() != "123") {
-            dialogVisible = true
-        }
+        // TODO 调取接口 判端token是否有效
+//        if (sharedPreferences.getToken() != null) {
+//            dialogVisible = true
+//        }
     }
 
     Dialog(
@@ -39,7 +40,6 @@ fun ListenTokenValidity(modifier: Modifier = Modifier) {
                     inclusive = true
                 }
             }
-
         }
     ) {
         Text(text = "您的身份验证过期\n请重新登录")
