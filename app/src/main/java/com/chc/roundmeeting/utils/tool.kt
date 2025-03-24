@@ -21,3 +21,9 @@ fun base64ToImageBitmap(base64String: String): ImageBitmap {
     // 将 Bitmap 转换为 ImageBitmap 并返回
     return bitmap.asImageBitmap()
 }
+
+/**
+ * 是否是汉字
+ */
+fun isChineseChar(c: Char): Boolean = c in '\u4E00'..'\u9FFF'
+

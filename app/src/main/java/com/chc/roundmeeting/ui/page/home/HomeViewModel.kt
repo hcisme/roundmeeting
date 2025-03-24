@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
-    var currentPage by mutableIntStateOf(0)
+    var currentPage by mutableIntStateOf(2)
 
     fun onChangeCurrentPage(current: Int) {
         currentPage = current

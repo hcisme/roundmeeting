@@ -20,6 +20,7 @@ class LoginViewModel : ViewModel() {
     var captchaError by mutableStateOf("")
     var captchaBitmap by mutableStateOf<ImageBitmap?>(null)
     var passwordVisible by mutableStateOf(false)
+    var isLoginIng by mutableStateOf(false)
 
     fun submit() {
         emailError = if (email.isEmpty()) "邮箱为必填项" else ""

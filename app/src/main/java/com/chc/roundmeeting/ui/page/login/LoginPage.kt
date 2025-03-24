@@ -2,6 +2,7 @@ package com.chc.roundmeeting.ui.page.login
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,6 +57,7 @@ import com.chc.roundmeeting.navigationgraph.HOME_PAGE
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
 import com.chc.roundmeeting.utils.saveToken
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -230,10 +232,15 @@ fun LoginPage() {
 
             Button(
                 onClick = {
-                    sharedPreferences.saveToken("sjioserjq90343r8jf9s")
-                    navController.navigate(HOME_PAGE) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
+                    loginVM.isLoginIng = true
+                    coroutineScope.launch {
+                        delay(2000)
+                        sharedPreferences.saveToken("sjioserjq90343r8jf9s")
+                        loginVM.isLoginIng = false
+                        navController.navigate(HOME_PAGE) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
                         }
                     }
                 },
@@ -258,6 +265,29 @@ fun LoginPage() {
                     ) {}
                 )
             }
+        }
+    }
+
+    AnimatedVisibility(visible = loginVM.isLoginIng) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login_loading))
+        val progress by animateLottieCompositionAsState(
+            composition,
+            isPlaying = true,
+            iterations = LottieConstants.IterateForever
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4F))
+        ) {
+            LottieAnimation(
+                modifier = Modifier
+                    .size(320.dp)
+                    .align(Alignment.Center),
+                composition = composition,
+                progress = { progress },
+            )
         }
     }
 

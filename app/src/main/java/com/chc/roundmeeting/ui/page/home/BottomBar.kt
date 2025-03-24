@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
@@ -23,8 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.chc.roundmeeting.R
 
 @Composable
 fun BottomBar(modifier: Modifier = Modifier, currentPage: Int, onClick: (key: Int) -> Unit = {}) {
@@ -38,10 +38,10 @@ fun BottomBar(modifier: Modifier = Modifier, currentPage: Int, onClick: (key: In
     ) {
         BottomBarItem(
             modifier = Modifier.weight(1f),
-            label = { Text(text = "会议", fontSize = 12.sp) },
+            label = { Text(text = "会议", style = MaterialTheme.typography.labelSmall) },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Home,
+                    painter = painterResource(R.drawable.meeting),
                     contentDescription = "会议",
                     tint = animateColorAsState(
                         if (currentPage == 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -55,7 +55,7 @@ fun BottomBar(modifier: Modifier = Modifier, currentPage: Int, onClick: (key: In
 
         BottomBarItem(
             modifier = Modifier.weight(1f),
-            label = { Text(text = "通讯录", fontSize = 12.sp) },
+            label = { Text(text = "通讯录", style = MaterialTheme.typography.labelSmall) },
             icon = {
                 Icon(
                     imageVector = Icons.Default.AccountBox,
@@ -72,7 +72,7 @@ fun BottomBar(modifier: Modifier = Modifier, currentPage: Int, onClick: (key: In
 
         BottomBarItem(
             modifier = Modifier.weight(1f),
-            label = { Text(text = "我的", fontSize = 12.sp) },
+            label = { Text(text = "我的", style = MaterialTheme.typography.labelSmall) },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Face,

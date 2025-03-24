@@ -56,7 +56,7 @@ fun OperationRow(modifier: Modifier = Modifier) {
 
         TextIconButton(
             icon = painterResource(R.drawable.shared_screen),
-            text = "共享会议",
+            text = "共享屏幕",
             modifier = Modifier.weight(1F),
             onClick = {}
         )

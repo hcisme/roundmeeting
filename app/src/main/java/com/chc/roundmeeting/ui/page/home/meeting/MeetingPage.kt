@@ -19,7 +19,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,11 +29,10 @@ import com.chc.roundmeeting.component.FadeImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MeetingPage(modifier: Modifier = Modifier) {
-    val a =
-        remember { "https://chcblogs.com/api/web/file/getResource?sourceName=cover/2024-12-05/072103770199934344625779170518101104339.jpg_thumbnail.jpg" }
-
     Surface(
-        modifier = modifier.statusBarsPadding()
+        modifier = modifier
+            .statusBarsPadding()
+            .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
@@ -55,7 +53,7 @@ fun MeetingPage(modifier: Modifier = Modifier) {
                             shape = CircleShape
                         ) {
                             FadeImage(
-                                coverUrl = a,
+                                firstChar = 'U',
                                 contentScale = ContentScale.Crop
                             )
                         }
@@ -76,6 +74,8 @@ fun MeetingPage(modifier: Modifier = Modifier) {
             OperationRow()
 
             HorizontalDivider(thickness = 0.4.dp, modifier = Modifier.padding(horizontal = 14.dp))
+
+            MeetingList()
         }
     }
 }
