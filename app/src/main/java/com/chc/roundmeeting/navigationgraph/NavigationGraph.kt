@@ -2,6 +2,8 @@ package com.chc.roundmeeting.navigationgraph
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.chc.roundmeeting.ui.page.home.HomePage
+import com.chc.roundmeeting.ui.page.joinmeetingsetting.JoinMeetingSettingPage
 import com.chc.roundmeeting.ui.page.login.LoginPage
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
@@ -35,7 +38,10 @@ fun NavigationGraph(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         navController = navController,
-        startDestination = if (sharedPreferences.getToken() == null) LOGIN_PAGE else HOME_PAGE,
+        enterTransition = { fadeIn(animationSpec = tween(500)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) },
+//        startDestination = if (sharedPreferences.getToken() == null) LOGIN_PAGE else HOME_PAGE,
+        startDestination = JOIN_MEETING_SETTING,
     ) {
         composable(route = HOME_PAGE) {
             HomePage()
@@ -43,6 +49,10 @@ fun NavigationGraph(modifier: Modifier = Modifier) {
 
         composable(route = LOGIN_PAGE) {
             LoginPage()
+        }
+
+        composable(route = JOIN_MEETING_SETTING) {
+            JoinMeetingSettingPage()
         }
     }
 }

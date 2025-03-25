@@ -3,40 +3,34 @@ package com.chc.roundmeeting.ui.page
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.component.Dialog
+import com.chc.roundmeeting.navigationgraph.HOME_PAGE
 import com.chc.roundmeeting.navigationgraph.LOGIN_PAGE
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
 import com.chc.roundmeeting.utils.clearToken
-import com.chc.roundmeeting.utils.getToken
 
 @Composable
-fun ListenTokenValidity(modifier: Modifier = Modifier) {
+fun AuthDialog(modifier: Modifier = Modifier) {
     val sharedPreferences = LocalSharedPreferences.current
     val navController = LocalNavController.current
-    var dialogVisible by remember { mutableStateOf(false) }
+    val authVM = viewModel<AuthViewModel>()
 
     LaunchedEffect(Unit) {
         // TODO 调取接口 判端token是否有效
-//        if (sharedPreferences.getToken() != null) {
-//            dialogVisible = true
-//        }
     }
 
     Dialog(
         modifier = modifier,
-        visible = dialogVisible,
+        visible = authVM.loginDialogVisible,
         confirmButtonText = "重新登陆",
         onConfirm = {
-            dialogVisible = false
+            authVM.hideLoginDialog()
             sharedPreferences.clearToken()
             navController.navigate(LOGIN_PAGE) {
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(HOME_PAGE) {
                     inclusive = true
                 }
             }

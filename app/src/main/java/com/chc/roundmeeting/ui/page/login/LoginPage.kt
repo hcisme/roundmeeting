@@ -54,6 +54,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.chc.roundmeeting.R
 import com.chc.roundmeeting.component.AnimatedLabelText
 import com.chc.roundmeeting.navigationgraph.HOME_PAGE
+import com.chc.roundmeeting.navigationgraph.LOGIN_PAGE
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
 import com.chc.roundmeeting.utils.saveToken
@@ -238,7 +239,7 @@ fun LoginPage() {
                         sharedPreferences.saveToken("sjioserjq90343r8jf9s")
                         loginVM.isLoginIng = false
                         navController.navigate(HOME_PAGE) {
-                            popUpTo(navController.graph.startDestinationId) {
+                            popUpTo(LOGIN_PAGE) {
                                 inclusive = true
                             }
                         }

@@ -6,12 +6,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.chc.roundmeeting.navigationgraph.NavigationGraph
 import com.chc.roundmeeting.network.Request
-import com.chc.roundmeeting.ui.page.ListenTokenValidity
+import com.chc.roundmeeting.ui.page.AuthDialog
+import com.chc.roundmeeting.ui.page.AuthViewModel
 import com.chc.roundmeeting.ui.theme.RoundMeetingTheme
 import com.chc.roundmeeting.utils.BASE_URL
 import com.chc.roundmeeting.utils.LocalNavController
@@ -23,10 +26,14 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
         val sharedPreferences = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE)
-        Request.init(BASE_URL)
 
         setContent {
             val navController = rememberNavController()
+            val authVM = viewModel<AuthViewModel>()
+
+            LaunchedEffect(Unit) {
+                Request.init(baseUrl = BASE_URL, authViewModel = authVM)
+            }
 
             CompositionLocalProvider(
                 LocalNavController provides navController,
@@ -35,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 RoundMeetingTheme {
                     NavigationGraph()
 
-                    ListenTokenValidity()
+                    AuthDialog()
                 }
             }
         }

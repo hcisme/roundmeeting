@@ -25,9 +25,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chc.roundmeeting.R
+import com.chc.roundmeeting.navigationgraph.JOIN_MEETING_SETTING
+import com.chc.roundmeeting.utils.LocalNavController
 
 @Composable
 fun OperationRow(modifier: Modifier = Modifier) {
+    val navController = LocalNavController.current
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -37,7 +41,9 @@ fun OperationRow(modifier: Modifier = Modifier) {
             icon = Icons.Rounded.Add,
             text = "加入会议",
             modifier = Modifier.weight(1F),
-            onClick = {}
+            onClick = {
+                navController.navigate(JOIN_MEETING_SETTING)
+            }
         )
 
         TextIconButton(

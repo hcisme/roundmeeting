@@ -28,7 +28,7 @@ fun HomePage() {
     val coroutineScope = rememberCoroutineScope()
     val homeVM = viewModel<HomeViewModel>()
     val pagerState = rememberPagerState(
-        initialPage = 2,
+        initialPage = homeVM.initialPageIndex,
         initialPageOffsetFraction = 0f
     ) { 3 }
 

@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.chc.roundmeeting.R
-import com.chc.roundmeeting.utils.DefaultAppBar
+import com.chc.roundmeeting.utils.DefaultAppBarHeight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +35,7 @@ fun ContactPage(modifier: Modifier = Modifier) {
                 title = {
                     Text("通讯录", style = MaterialTheme.typography.titleMedium)
                 },
-                expandedHeight = DefaultAppBar.dp,
+                expandedHeight = DefaultAppBarHeight.dp,
                 actions = {
                     IconButton(
                         onClick = {}

@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.component.Dialog
+import com.chc.roundmeeting.navigationgraph.HOME_PAGE
 import com.chc.roundmeeting.navigationgraph.LOGIN_PAGE
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
@@ -60,7 +61,7 @@ fun Logout(modifier: Modifier = Modifier) {
             myVM.logoutDialogVisible = false
             sharedPreferences.clearToken()
             navController.navigate(LOGIN_PAGE) {
-                popUpTo(navController.graph.startDestinationId) {
+                popUpTo(HOME_PAGE) {
                     inclusive = true
                 }
             }

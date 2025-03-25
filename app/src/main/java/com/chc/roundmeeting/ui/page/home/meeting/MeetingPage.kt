@@ -25,7 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.chc.roundmeeting.component.FadeImage
-import com.chc.roundmeeting.utils.DefaultAppBar
+import com.chc.roundmeeting.utils.DefaultAppBarHeight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +42,7 @@ fun MeetingPage(modifier: Modifier = Modifier) {
         ) {
             TopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                expandedHeight = DefaultAppBar.dp,
+                expandedHeight = DefaultAppBarHeight.dp,
                 title = {
                     Row(
                         modifier = Modifier.fillMaxSize(),

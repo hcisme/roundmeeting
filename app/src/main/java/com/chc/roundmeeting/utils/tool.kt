@@ -1,7 +1,12 @@
 package com.chc.roundmeeting.utils
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.Settings
 import android.util.Base64
+import android.widget.Toast
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 
@@ -27,3 +32,11 @@ fun base64ToImageBitmap(base64String: String): ImageBitmap {
  */
 fun isChineseChar(c: Char): Boolean = c in '\u4E00'..'\u9FFF'
 
+fun Context.startSettingActivity(tooltip: String) {
+    this.startActivity(
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", this@startSettingActivity.packageName, null)
+        }
+    )
+    Toast.makeText(this, tooltip, Toast.LENGTH_SHORT).show()
+}
