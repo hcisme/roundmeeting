@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chc.roundmeeting.R
-import com.chc.roundmeeting.navigationgraph.JOIN_MEETING_SETTING
+import com.chc.roundmeeting.navigationgraph.NavigationName
 import com.chc.roundmeeting.utils.LocalNavController
 
 @Composable
@@ -42,7 +42,7 @@ fun OperationRow(modifier: Modifier = Modifier) {
             text = "加入会议",
             modifier = Modifier.weight(1F),
             onClick = {
-                navController.navigate(JOIN_MEETING_SETTING)
+                navController.navigate(NavigationName.JOIN_MEETING_SETTING)
             }
         )
 
@@ -50,7 +50,9 @@ fun OperationRow(modifier: Modifier = Modifier) {
             icon = painterResource(R.drawable.quick),
             text = "快速会议",
             modifier = Modifier.weight(1F),
-            onClick = {}
+            onClick = {
+                navController.navigate(NavigationName.QUICK_MEETING_SETTING)
+            }
         )
 
         TextIconButton(

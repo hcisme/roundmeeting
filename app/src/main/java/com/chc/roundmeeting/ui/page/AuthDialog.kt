@@ -6,8 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.component.Dialog
-import com.chc.roundmeeting.navigationgraph.HOME_PAGE
-import com.chc.roundmeeting.navigationgraph.LOGIN_PAGE
+import com.chc.roundmeeting.navigationgraph.NavigationName
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
 import com.chc.roundmeeting.utils.clearToken
@@ -29,8 +28,8 @@ fun AuthDialog(modifier: Modifier = Modifier) {
         onConfirm = {
             authVM.hideLoginDialog()
             sharedPreferences.clearToken()
-            navController.navigate(LOGIN_PAGE) {
-                popUpTo(HOME_PAGE) {
+            navController.navigate(NavigationName.LOGIN_PAGE) {
+                popUpTo(NavigationName.HOME_PAGE) {
                     inclusive = true
                 }
             }

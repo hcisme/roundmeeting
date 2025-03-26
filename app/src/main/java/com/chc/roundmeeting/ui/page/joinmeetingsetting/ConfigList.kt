@@ -1,6 +1,5 @@
 package com.chc.roundmeeting.ui.page.joinmeetingsetting
 
-import android.Manifest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,34 +31,30 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.chc.roundmeeting.component.Dialog
+import com.chc.roundmeeting.MainActivity
 import com.chc.roundmeeting.utils.LocalSharedPreferences
-import com.chc.roundmeeting.utils.PermissionPreferenceManager
 import com.chc.roundmeeting.utils.SpaceSeparatorTransformation
-import com.chc.roundmeeting.utils.TEXT_DEMO
+import com.chc.roundmeeting.utils.TestData
 import com.chc.roundmeeting.utils.getJoinMeetingHardwareConfig
-import com.chc.roundmeeting.utils.startSettingActivity
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ConfigList(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val sharedPreferences = LocalSharedPreferences.current
-    val audioPermissionState = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-    val joinMeetingSettingSV = viewModel<JoinMeetingSettingViewModel>()
+    val joinMeetingSettingSV = viewModel<JoinMeetingSettingViewModel>(context as MainActivity)
 
     LaunchedEffect(Unit) {
         val config = sharedPreferences.getJoinMeetingHardwareConfig()
         if (config != null) {
-            joinMeetingSettingSV.onChangeConfig(config)
+            joinMeetingSettingSV.onChangeConfig(
+                joinMeetingSettingSV.config.copy(
+                    isOpenVideo = config.isOpenVideo,
+                    isOpenLoudspeaker = config.isOpenLoudspeaker,
+                    isOpenMicrophone = config.isOpenMicrophone
+                )
+            )
         }
     }
 
@@ -67,7 +62,7 @@ fun ConfigList(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth()
     ) {
         item {
-            LabelTextField(label = "会议号") {
+            LabelLayout(label = "会议号") {
                 TransparentTextField(
                     modifier = Modifier.weight(1F),
                     value = joinMeetingSettingSV.config.meetingNumber,
@@ -95,7 +90,7 @@ fun ConfigList(modifier: Modifier = Modifier) {
         }
 
         item {
-            LabelTextField(label = "您的名称") {
+            LabelLayout(label = "您的名称") {
                 TransparentTextField(
                     modifier = Modifier.weight(1F),
                     value = joinMeetingSettingSV.config.name,
@@ -111,20 +106,20 @@ fun ConfigList(modifier: Modifier = Modifier) {
         }
 
         item {
-            LabelTextField(label = "开启麦克风", horizontalArrangement = Arrangement.SpaceBetween) {
+            LabelLayout(label = "开启麦克风", horizontalArrangement = Arrangement.SpaceBetween) {
                 Switch(
                     checked = joinMeetingSettingSV.config.isOpenMicrophone,
                     onCheckedChange = {
-                        if (audioPermissionState.status.isGranted) {
-                            joinMeetingSettingSV.onChangeConfig(
-                                newConfig = joinMeetingSettingSV.config.copy(
-                                    isOpenMicrophone = it
-                                ),
-                                sharedPreferences = sharedPreferences
-                            )
-                        } else {
-                            joinMeetingSettingSV.audioDialogVisible = true
-                        }
+//                        if (audioPermissionState.status.isGranted) {
+                        joinMeetingSettingSV.onChangeConfig(
+                            newConfig = joinMeetingSettingSV.config.copy(
+                                isOpenMicrophone = it
+                            ),
+                            sharedPreferences = sharedPreferences
+                        )
+//                        } else {
+//                            joinMeetingSettingSV.audioDialogVisible = true
+//                        }
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
@@ -138,7 +133,7 @@ fun ConfigList(modifier: Modifier = Modifier) {
         }
 
         item {
-            LabelTextField(label = "开启扬声器", horizontalArrangement = Arrangement.SpaceBetween) {
+            LabelLayout(label = "开启扬声器", horizontalArrangement = Arrangement.SpaceBetween) {
                 Switch(
                     checked = joinMeetingSettingSV.config.isOpenLoudspeaker,
                     onCheckedChange = {
@@ -161,20 +156,20 @@ fun ConfigList(modifier: Modifier = Modifier) {
         }
 
         item {
-            LabelTextField(label = "开启视频", horizontalArrangement = Arrangement.SpaceBetween) {
+            LabelLayout(label = "开启视频", horizontalArrangement = Arrangement.SpaceBetween) {
                 Switch(
                     checked = joinMeetingSettingSV.config.isOpenVideo,
                     onCheckedChange = {
-                        if (cameraPermissionState.status.isGranted) {
-                            joinMeetingSettingSV.onChangeConfig(
-                                newConfig = joinMeetingSettingSV.config.copy(
-                                    isOpenVideo = it
-                                ),
-                                sharedPreferences = sharedPreferences
-                            )
-                        } else {
-                            joinMeetingSettingSV.videoDialogVisible = true
-                        }
+//                        if (cameraPermissionState.status.isGranted) {
+                        joinMeetingSettingSV.onChangeConfig(
+                            newConfig = joinMeetingSettingSV.config.copy(
+                                isOpenVideo = it
+                            ),
+                            sharedPreferences = sharedPreferences
+                        )
+//                        } else {
+//                            joinMeetingSettingSV.videoDialogVisible = true
+//                        }
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
@@ -188,62 +183,62 @@ fun ConfigList(modifier: Modifier = Modifier) {
         }
     }
 
-    Dialog(
-        visible = joinMeetingSettingSV.audioDialogVisible,
-        confirmButtonText = "允许",
-        cancelButtonText = "取消",
-        onConfirm = {
-            PermissionPreferenceManager.managePermissionRequestFlow(
-                context = context,
-                permissionType = audioPermissionState.permission,
-                onFirstRequest = { audioPermissionState.launchPermissionRequest() }
-            ) {
-                if (audioPermissionState.status.shouldShowRationale) {
-                    audioPermissionState.launchPermissionRequest()
-                } else {
-                    context.startSettingActivity(tooltip = "前往设置 手动开启该应用麦克风权限")
-                }
-            }
-            joinMeetingSettingSV.audioDialogVisible = false
-        },
-        onDismissRequest = {
-            joinMeetingSettingSV.audioDialogVisible = false
-        }
-    ) {
-        Text(text = "需要访问麦克风，才能让其他参会者听到您的声音")
-    }
-
-    Dialog(
-        visible = joinMeetingSettingSV.videoDialogVisible,
-        confirmButtonText = "允许",
-        cancelButtonText = "取消",
-        onConfirm = {
-            PermissionPreferenceManager.managePermissionRequestFlow(
-                context = context,
-                permissionType = cameraPermissionState.permission,
-                onFirstRequest = { cameraPermissionState.launchPermissionRequest() }
-            ) {
-                if (cameraPermissionState.status.shouldShowRationale) {
-                    cameraPermissionState.launchPermissionRequest()
-                } else {
-                    context.startSettingActivity(tooltip = "前往设置 手动开启该应用摄像头权限")
-                }
-            }
-            joinMeetingSettingSV.videoDialogVisible = false
-        },
-        onDismissRequest = {
-            joinMeetingSettingSV.videoDialogVisible = false
-        }
-    ) {
-        Text(text = "开启摄像头权限，让参会成员看到您的实时画面")
-    }
+//    Dialog(
+//        visible = joinMeetingSettingSV.audioDialogVisible,
+//        confirmButtonText = "允许",
+//        cancelButtonText = "取消",
+//        onConfirm = {
+//            PermissionPreferenceManager.managePermissionRequestFlow(
+//                context = context,
+//                permissionType = audioPermissionState.permission,
+//                onFirstRequest = { audioPermissionState.launchPermissionRequest() }
+//            ) {
+//                if (audioPermissionState.status.shouldShowRationale) {
+//                    audioPermissionState.launchPermissionRequest()
+//                } else {
+//                    context.startSettingActivity(tooltip = "前往设置 手动开启该应用麦克风权限")
+//                }
+//            }
+//            joinMeetingSettingSV.audioDialogVisible = false
+//        },
+//        onDismissRequest = {
+//            joinMeetingSettingSV.audioDialogVisible = false
+//        }
+//    ) {
+//        Text(text = "需要访问麦克风，才能让其他参会者听到您的声音")
+//    }
+//
+//    Dialog(
+//        visible = joinMeetingSettingSV.videoDialogVisible,
+//        confirmButtonText = "允许",
+//        cancelButtonText = "取消",
+//        onConfirm = {
+//            PermissionPreferenceManager.managePermissionRequestFlow(
+//                context = context,
+//                permissionType = cameraPermissionState.permission,
+//                onFirstRequest = { cameraPermissionState.launchPermissionRequest() }
+//            ) {
+//                if (cameraPermissionState.status.shouldShowRationale) {
+//                    cameraPermissionState.launchPermissionRequest()
+//                } else {
+//                    context.startSettingActivity(tooltip = "前往设置 手动开启该应用摄像头权限")
+//                }
+//            }
+//            joinMeetingSettingSV.videoDialogVisible = false
+//        },
+//        onDismissRequest = {
+//            joinMeetingSettingSV.videoDialogVisible = false
+//        }
+//    ) {
+//        Text(text = "开启摄像头权限，让参会成员看到您的实时画面")
+//    }
 }
 
 @Composable
-private fun LabelTextField(
+fun LabelLayout(
     modifier: Modifier = Modifier,
     label: String,
-    labelWidth: Dp? = null,
+    labelLength: Int? = null,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     content: @Composable (RowScope.() -> Unit)
@@ -251,7 +246,7 @@ private fun LabelTextField(
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
     val singleTextWidthPixel = textMeasurer.measure(
-        text = TEXT_DEMO,
+        text = TestData.TEXT_DEMO,
         style = LocalTextStyle.current
     ).size.width
     val singleTextWidthDp = with(density) { singleTextWidthPixel.toDp() }
@@ -265,7 +260,7 @@ private fun LabelTextField(
     ) {
         Box(
             modifier = Modifier
-                .width(labelWidth ?: (singleTextWidthDp * 6))
+                .width(singleTextWidthDp * (labelLength ?: 6))
                 .padding(end = 8.dp)
         ) {
             Text(text = label, maxLines = 1)

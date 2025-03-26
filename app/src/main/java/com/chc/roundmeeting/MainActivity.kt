@@ -16,9 +16,9 @@ import com.chc.roundmeeting.network.Request
 import com.chc.roundmeeting.ui.page.AuthDialog
 import com.chc.roundmeeting.ui.page.AuthViewModel
 import com.chc.roundmeeting.ui.theme.RoundMeetingTheme
-import com.chc.roundmeeting.utils.BASE_URL
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.LocalSharedPreferences
+import com.chc.roundmeeting.utils.NetworkConstants
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
             val authVM = viewModel<AuthViewModel>()
 
             LaunchedEffect(Unit) {
-                Request.init(baseUrl = BASE_URL, authViewModel = authVM)
+                Request.init(baseUrl = NetworkConstants.BASE_URL, authViewModel = authVM)
             }
 
             CompositionLocalProvider(

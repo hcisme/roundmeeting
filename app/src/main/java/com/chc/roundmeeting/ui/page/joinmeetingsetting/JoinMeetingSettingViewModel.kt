@@ -10,20 +10,16 @@ import com.chc.roundmeeting.utils.saveJoinMeetingHardwareConfig
 class JoinMeetingSettingViewModel : ViewModel() {
     var config by mutableStateOf(
         JoinMeetingConfig(
-            meetingNumber = "",
-            name = "",
+            meetingNumber = "2312731623",
+            name = "池海成",
             isOpenMicrophone = false,
             isOpenLoudspeaker = false,
             isOpenVideo = false
         )
     )
-    var isEnableJoinMeetingButton by mutableStateOf(false)
-    var audioDialogVisible by mutableStateOf(false)
-    var videoDialogVisible by mutableStateOf(false)
 
     fun onChangeConfig(newConfig: JoinMeetingConfig, sharedPreferences: SharedPreferences? = null) {
         config = newConfig
-        isEnableJoinMeetingButton = newConfig.meetingNumber != "" && newConfig.name != ""
         sharedPreferences?.saveJoinMeetingHardwareConfig(newConfig)
     }
 }

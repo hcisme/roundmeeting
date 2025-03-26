@@ -2,6 +2,7 @@ package com.chc.roundmeeting.network
 
 import android.util.Log
 import com.chc.roundmeeting.ui.page.AuthViewModel
+import com.chc.roundmeeting.utils.NetworkConstants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Interceptor
@@ -12,10 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object Request {
-    private const val CONNECT_TIMEOUT = 15L
-    private const val READ_TIMEOUT = 15L
-    private const val WRITE_TIMEOUT = 15L
-
     lateinit var retrofit: Retrofit
 
     /**
@@ -24,9 +21,9 @@ object Request {
      */
     fun init(baseUrl: String, authViewModel: AuthViewModel) {
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.MINUTES)
-            .readTimeout(READ_TIMEOUT, TimeUnit.MINUTES)
-            .writeTimeout(WRITE_TIMEOUT, TimeUnit.MINUTES)
+            .connectTimeout(NetworkConstants.CONNECT_TIMEOUT, TimeUnit.MINUTES)
+            .readTimeout(NetworkConstants.READ_TIMEOUT, TimeUnit.MINUTES)
+            .writeTimeout(NetworkConstants.WRITE_TIMEOUT, TimeUnit.MINUTES)
             .addInterceptor(createRequestInterceptor())
             .addInterceptor(createResponseInterceptor(authViewModel))
             .build()
@@ -68,7 +65,7 @@ object Request {
             val responseString = buffer.readUtf8()
 
             try {
-                val type = object : TypeToken<BaseResult<*>>(){}.type
+                val type = object : TypeToken<BaseResult<*>>() {}.type
                 val baseResult = Gson().fromJson<BaseResult<*>>(responseString, type)
                 // TODO 使用状态码枚举
                 if (baseResult.code == 401) {

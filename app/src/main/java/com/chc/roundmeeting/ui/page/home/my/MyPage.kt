@@ -29,7 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.chc.roundmeeting.component.FadeImage
-import com.chc.roundmeeting.utils.DefaultAppBarHeight
+import com.chc.roundmeeting.utils.NumConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +46,7 @@ fun MyPage(modifier: Modifier = Modifier) {
         ) {
             TopAppBar(
                 title = {},
-                expandedHeight = DefaultAppBarHeight.dp,
+                expandedHeight = NumConstants.DEFAULT_APPBAR_HEIGHT.dp,
                 actions = {
                     IconButton(
                         onClick = {}

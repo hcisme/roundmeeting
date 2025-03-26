@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chc.roundmeeting.component.Contactor
-import com.chc.roundmeeting.utils.TEST_AVATAR_URL
+import com.chc.roundmeeting.utils.TestData
 
 @Composable
 fun ContactList(modifier: Modifier = Modifier) {
@@ -42,9 +42,11 @@ fun ContactList(modifier: Modifier = Modifier) {
         }
 
         items(20) {
-            Contactor(modifier = _modifier, coverUrl = TEST_AVATAR_URL, name = "池海成 $it") {
-
-            }
+            Contactor(
+                modifier = _modifier,
+                coverUrl = TestData.TEST_AVATAR_URL,
+                name = "池海成 $it"
+            ) {}
         }
 
         item {

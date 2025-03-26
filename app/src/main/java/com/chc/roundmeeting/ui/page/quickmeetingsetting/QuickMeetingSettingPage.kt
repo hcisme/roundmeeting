@@ -1,4 +1,4 @@
-package com.chc.roundmeeting.ui.page.joinmeetingsetting
+package com.chc.roundmeeting.ui.page.quickmeetingsetting
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,12 +26,12 @@ import com.chc.roundmeeting.utils.NumConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JoinMeetingSettingPage(modifier: Modifier = Modifier) {
+fun QuickMeetingSettingPage(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val navController = LocalNavController.current
-    val joinMeetingSettingSV = viewModel<JoinMeetingSettingViewModel>(context as MainActivity)
-    val config = joinMeetingSettingSV.config
-    val roomVM = viewModel<RoomViewModel>(context)
+    val roomVM = viewModel<RoomViewModel>(context as MainActivity)
+    val quickMeetingSettingMV = viewModel<QuickMeetingSettingViewModel>(context)
+    val config = quickMeetingSettingMV.config
 
     Surface(
         modifier = modifier
@@ -55,22 +55,21 @@ fun JoinMeetingSettingPage(modifier: Modifier = Modifier) {
                     }
                 },
                 title = {
-                    Text("加入会议", style = MaterialTheme.typography.titleMedium)
+                    Text("快速会议", style = MaterialTheme.typography.titleMedium)
                 }
             )
 
-            ConfigList(modifier = Modifier.weight(1F))
+            ConfigContent(modifier = Modifier.weight(1F))
 
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 shape = MaterialTheme.shapes.small,
-                enabled = joinMeetingSettingSV.config.meetingNumber != "" && joinMeetingSettingSV.config.name != "",
                 onClick = {
                     roomVM.onRoomConfigChange(
                         RoomConfig(
-                            meetingNumber = config.meetingNumber,
+                            meetingNumber = config.personMeetingNumber,
                             name = config.name,
                             isOpenMicrophone = config.isOpenMicrophone,
                             isOpenLoudspeaker = config.isOpenLoudspeaker,
@@ -78,13 +77,13 @@ fun JoinMeetingSettingPage(modifier: Modifier = Modifier) {
                         )
                     )
                     navController.navigate(NavigationName.MEETING_ROOM) {
-                        popUpTo(NavigationName.JOIN_MEETING_SETTING) {
+                        popUpTo(NavigationName.QUICK_MEETING_SETTING) {
                             inclusive = true
                         }
                     }
                 }
             ) {
-                Text("加入会议")
+                Text("进入会议")
             }
         }
     }

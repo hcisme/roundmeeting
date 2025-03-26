@@ -1,8 +1,8 @@
-package com.chc.roundmeeting.ui.page.joinmeetingsetting
+package com.chc.roundmeeting.ui.page.meetingroom
 
-data class JoinMeetingConfig(
+data class RoomConfig(
     /**
-     * 加入的会议号
+     * 加入 或 自己 的会议号
      */
     val meetingNumber: String,
     /**
