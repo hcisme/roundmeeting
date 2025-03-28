@@ -1,8 +1,8 @@
-package com.chc.roundmeeting.servies.audio
+package com.chc.roundmeeting.services.audio
 
 import android.media.AudioFormat
 import android.media.AudioRecord
-import com.chc.roundmeeting.servies.audio.AudioConfig.DEFAULT_BUFFER_SIZE
+import com.chc.roundmeeting.services.audio.AudioConfig.DEFAULT_BUFFER_SIZE
 
 /**
  * 音频采集配置参数中心

@@ -1,4 +1,4 @@
-package com.chc.roundmeeting.servies.camera
+package com.chc.roundmeeting.services.camera
 
 import android.media.MediaFormat
 import android.util.Size

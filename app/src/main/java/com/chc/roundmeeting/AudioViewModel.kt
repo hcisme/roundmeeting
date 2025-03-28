@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.chc.roundmeeting.servies.audio.AudioRecorderManager
+import com.chc.roundmeeting.services.audio.AudioRecorderManager
 
 class AudioViewModel : ViewModel() {
     var demoNum by mutableFloatStateOf(0F)

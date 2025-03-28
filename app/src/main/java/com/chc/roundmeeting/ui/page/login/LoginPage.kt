@@ -128,8 +128,8 @@ fun LoginPage() {
                 },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp, horizontal = 20.dp),
+                    .padding(vertical = 4.dp, horizontal = 20.dp)
+                    .fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -166,8 +166,8 @@ fun LoginPage() {
                 },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp, horizontal = 20.dp),
+                    .padding(vertical = 4.dp, horizontal = 20.dp)
+                    .fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -178,8 +178,8 @@ fun LoginPage() {
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp, horizontal = 20.dp),
+                    .padding(vertical = 4.dp, horizontal = 20.dp)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
@@ -199,7 +199,9 @@ fun LoginPage() {
                     shape = MaterialTheme.shapes.small,
                     modifier = Modifier.weight(1F)
                 )
+
                 Spacer(modifier = Modifier.width(8.dp))
+
                 Surface(
                     modifier = Modifier
                         .size(

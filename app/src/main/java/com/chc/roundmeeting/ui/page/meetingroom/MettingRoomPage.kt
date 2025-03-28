@@ -24,6 +24,7 @@ import com.chc.roundmeeting.AudioViewModel
 import com.chc.roundmeeting.MainActivity
 import com.chc.roundmeeting.component.CameraPreview
 import com.chc.roundmeeting.component.Dialog
+import com.chc.roundmeeting.services.MeetingService
 import com.chc.roundmeeting.utils.PermissionPreferenceManager
 import com.chc.roundmeeting.utils.startSettingActivity
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -93,6 +94,7 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
                 TopBar(
                     onClickExitText = {
                         audioVM.recorder.stop()
+                        MeetingService.stop(context)
                     }
                 )
 
