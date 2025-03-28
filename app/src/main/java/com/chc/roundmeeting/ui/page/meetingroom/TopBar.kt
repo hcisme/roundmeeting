@@ -21,12 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.MainActivity
 import com.chc.roundmeeting.R
+import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.NumConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(modifier: Modifier = Modifier) {
+fun TopBar(modifier: Modifier = Modifier, onClickExitText: () -> Unit = {}) {
     val context = LocalContext.current
+    val navController = LocalNavController.current
     val roomVM = viewModel<RoomViewModel>(context as MainActivity)
     val roomConfig = roomVM.roomConfig!!
 
@@ -59,7 +61,10 @@ fun TopBar(modifier: Modifier = Modifier) {
             actions = {
                 TextButton(
                     shape = MaterialTheme.shapes.small,
-                    onClick = {}
+                    onClick = {
+                        onClickExitText()
+                        navController.popBackStack()
+                    }
                 ) {
                     Text("结束", color = MaterialTheme.colorScheme.error)
                 }

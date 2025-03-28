@@ -36,21 +36,25 @@ import com.google.accompanist.permissions.isGranted
 fun BottomBar(
     modifier: Modifier = Modifier,
     audioPermissionState: PermissionState,
-    cameraPermissionState: PermissionState
+    cameraPermissionState: PermissionState,
+    isOpenMicrophone: Boolean,
+    isOpenVideo: Boolean,
+    onOpenMicrophone: () -> Unit,
+    onCloseMicrophone: () -> Unit
 ) {
     val context = LocalContext.current
     val roomVM = viewModel<RoomViewModel>(context as MainActivity)
     val roomConfig = roomVM.roomConfig!!
-    val isOpenMicrophone = audioPermissionState.status.isGranted && roomConfig.isOpenMicrophone
-    val isOpenVideo = cameraPermissionState.status.isGranted && roomConfig.isOpenVideo
 
     // 麦克风
-    fun onChangeMicrophoneStatus() {
+    val onChangeMicrophoneStatus = {
         if (isOpenMicrophone) {
             roomVM.roomConfig = roomVM.roomConfig!!.copy(isOpenMicrophone = false)
+            onCloseMicrophone()
         } else {
             if (audioPermissionState.status.isGranted) {
                 roomVM.roomConfig = roomVM.roomConfig!!.copy(isOpenMicrophone = true)
+                onOpenMicrophone()
             } else {
                 roomVM.showAudioDialog()
             }
@@ -58,7 +62,7 @@ fun BottomBar(
     }
 
     // 视频
-    fun onChangeVideoStatus() {
+    val onChangeVideoStatus = {
         if (isOpenVideo) {
             roomVM.roomConfig = roomVM.roomConfig!!.copy(isOpenVideo = false)
         } else {
@@ -91,10 +95,9 @@ fun BottomBar(
                         .fillMaxHeight()
                         .clickable(
                             indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            onChangeMicrophoneStatus()
-                        }
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onChangeMicrophoneStatus
+                        )
                         .padding(horizontal = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceAround
@@ -120,10 +123,9 @@ fun BottomBar(
                         .fillMaxHeight()
                         .clickable(
                             indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            onChangeVideoStatus()
-                        }
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = onChangeVideoStatus
+                        )
                         .padding(horizontal = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceAround
@@ -135,6 +137,38 @@ fun BottomBar(
                         contentDescription = null
                     )
                     Text("视频", style = MaterialTheme.typography.labelSmall)
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .weight(1F)
+                    .fillMaxHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {
+                                if (roomVM.memberDrawerVisible) {
+                                    roomVM.hideMemberDrawer()
+                                } else {
+                                    roomVM.showMemberDrawer()
+                                }
+                            }
+                        )
+                        .padding(horizontal = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.member),
+                        contentDescription = null
+                    )
+                    Text("管理成员(123)", style = MaterialTheme.typography.labelSmall)
                 }
             }
         }

@@ -33,6 +33,23 @@ fun JoinMeetingSettingPage(modifier: Modifier = Modifier) {
     val config = joinMeetingSettingSV.config
     val roomVM = viewModel<RoomViewModel>(context)
 
+    val enterMeeting = {
+        roomVM.onRoomConfigChange(
+            RoomConfig(
+                meetingNumber = config.meetingNumber,
+                name = config.name,
+                isOpenMicrophone = config.isOpenMicrophone,
+                isOpenLoudspeaker = config.isOpenLoudspeaker,
+                isOpenVideo = config.isOpenVideo
+            )
+        )
+        navController.navigate(NavigationName.MEETING_ROOM) {
+            popUpTo(NavigationName.JOIN_MEETING_SETTING) {
+                inclusive = true
+            }
+        }
+    }
+
     Surface(
         modifier = modifier
             .fillMaxSize()
@@ -67,22 +84,7 @@ fun JoinMeetingSettingPage(modifier: Modifier = Modifier) {
                     .padding(horizontal = 16.dp),
                 shape = MaterialTheme.shapes.small,
                 enabled = joinMeetingSettingSV.config.meetingNumber != "" && joinMeetingSettingSV.config.name != "",
-                onClick = {
-                    roomVM.onRoomConfigChange(
-                        RoomConfig(
-                            meetingNumber = config.meetingNumber,
-                            name = config.name,
-                            isOpenMicrophone = config.isOpenMicrophone,
-                            isOpenLoudspeaker = config.isOpenLoudspeaker,
-                            isOpenVideo = config.isOpenVideo
-                        )
-                    )
-                    navController.navigate(NavigationName.MEETING_ROOM) {
-                        popUpTo(NavigationName.JOIN_MEETING_SETTING) {
-                            inclusive = true
-                        }
-                    }
-                }
+                onClick = enterMeeting
             ) {
                 Text("加入会议")
             }

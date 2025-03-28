@@ -33,6 +33,23 @@ fun QuickMeetingSettingPage(modifier: Modifier = Modifier) {
     val quickMeetingSettingMV = viewModel<QuickMeetingSettingViewModel>(context)
     val config = quickMeetingSettingMV.config
 
+    val enterMeeting = {
+        roomVM.onRoomConfigChange(
+            RoomConfig(
+                meetingNumber = config.personMeetingNumber,
+                name = config.name,
+                isOpenMicrophone = config.isOpenMicrophone,
+                isOpenLoudspeaker = config.isOpenLoudspeaker,
+                isOpenVideo = config.isOpenVideo
+            )
+        )
+        navController.navigate(NavigationName.MEETING_ROOM) {
+            popUpTo(NavigationName.QUICK_MEETING_SETTING) {
+                inclusive = true
+            }
+        }
+    }
+
     Surface(
         modifier = modifier
             .fillMaxSize()
@@ -66,22 +83,7 @@ fun QuickMeetingSettingPage(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 shape = MaterialTheme.shapes.small,
-                onClick = {
-                    roomVM.onRoomConfigChange(
-                        RoomConfig(
-                            meetingNumber = config.personMeetingNumber,
-                            name = config.name,
-                            isOpenMicrophone = config.isOpenMicrophone,
-                            isOpenLoudspeaker = config.isOpenLoudspeaker,
-                            isOpenVideo = config.isOpenVideo
-                        )
-                    )
-                    navController.navigate(NavigationName.MEETING_ROOM) {
-                        popUpTo(NavigationName.QUICK_MEETING_SETTING) {
-                            inclusive = true
-                        }
-                    }
-                }
+                onClick = enterMeeting
             ) {
                 Text("进入会议")
             }

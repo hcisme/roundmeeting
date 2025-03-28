@@ -1,5 +1,7 @@
 package com.chc.roundmeeting
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,10 +23,12 @@ import com.chc.roundmeeting.utils.LocalSharedPreferences
 import com.chc.roundmeeting.utils.NetworkConstants
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val sharedPreferences = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE)
 
         setContent {
