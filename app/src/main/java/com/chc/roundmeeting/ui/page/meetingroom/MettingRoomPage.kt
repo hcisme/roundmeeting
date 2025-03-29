@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,6 +43,7 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
     val roomVM = viewModel<RoomViewModel>(context)
     val roomConfig = roomVM.roomConfig
     var isFirstLoad by remember { mutableStateOf(true) }
+    var frameCount by remember { mutableIntStateOf(0) }
 
     fun initPermission() {
         // 麦克风
@@ -104,9 +106,13 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
                         .weight(1F)
                 ) {
                     if (roomVM.getIsOpenVideo(cameraPermissionState)) {
-                        CameraPreview(modifier = Modifier.fillMaxSize())
+                        CameraPreview(
+                            modifier = Modifier.fillMaxSize(),
+                            onImageAvailable = { data ->
+                                frameCount++
+                            })
                     }
-                    Text("${audioVM.demoNum}")
+                    Text("${audioVM.demoNum}======${frameCount}")
                 }
 
                 BottomBar(
