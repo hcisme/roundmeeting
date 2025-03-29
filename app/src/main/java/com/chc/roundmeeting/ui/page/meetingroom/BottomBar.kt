@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.MainActivity
 import com.chc.roundmeeting.R
+import com.chc.roundmeeting.VideoViewModel
 import com.chc.roundmeeting.utils.NumConstants
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -44,6 +45,7 @@ fun BottomBar(
 ) {
     val context = LocalContext.current
     val roomVM = viewModel<RoomViewModel>(context as MainActivity)
+    val videoVM = viewModel<VideoViewModel>(context)
     val roomConfig = roomVM.roomConfig!!
 
     // 麦克风
@@ -65,9 +67,11 @@ fun BottomBar(
     val onChangeVideoStatus = {
         if (isOpenVideo) {
             roomVM.roomConfig = roomVM.roomConfig!!.copy(isOpenVideo = false)
+            videoVM.stopCameraProvider()
         } else {
             if (cameraPermissionState.status.isGranted) {
                 roomVM.roomConfig = roomVM.roomConfig!!.copy(isOpenVideo = true)
+
             } else {
                 roomVM.showVideoDialog()
             }

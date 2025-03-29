@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.MainActivity
 import com.chc.roundmeeting.navigationgraph.NavigationName
+import com.chc.roundmeeting.services.MeetingService
 import com.chc.roundmeeting.ui.page.meetingroom.RoomConfig
 import com.chc.roundmeeting.ui.page.meetingroom.RoomViewModel
 import com.chc.roundmeeting.utils.LocalNavController
@@ -43,6 +44,7 @@ fun QuickMeetingSettingPage(modifier: Modifier = Modifier) {
                 isOpenVideo = config.isOpenVideo
             )
         )
+        MeetingService.start(context)
         navController.navigate(NavigationName.MEETING_ROOM) {
             popUpTo(NavigationName.QUICK_MEETING_SETTING) {
                 inclusive = true

@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.AudioViewModel
 import com.chc.roundmeeting.MainActivity
+import com.chc.roundmeeting.VideoViewModel
 import com.chc.roundmeeting.component.CameraPreview
 import com.chc.roundmeeting.component.Dialog
 import com.chc.roundmeeting.services.MeetingService
@@ -40,10 +41,10 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
     val audioPermissionState = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val audioVM = viewModel<AudioViewModel>(context as MainActivity)
+    val videoVM = viewModel<VideoViewModel>(context)
     val roomVM = viewModel<RoomViewModel>(context)
     val roomConfig = roomVM.roomConfig
     var isFirstLoad by remember { mutableStateOf(true) }
-    var frameCount by remember { mutableIntStateOf(0) }
 
     fun initPermission() {
         // 麦克风
@@ -97,6 +98,7 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
                     onClickExitText = {
                         audioVM.recorder.stop()
                         MeetingService.stop(context)
+                        videoVM.stopCameraProvider()
                     }
                 )
 
@@ -106,13 +108,9 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
                         .weight(1F)
                 ) {
                     if (roomVM.getIsOpenVideo(cameraPermissionState)) {
-                        CameraPreview(
-                            modifier = Modifier.fillMaxSize(),
-                            onImageAvailable = { data ->
-                                frameCount++
-                            })
+                        CameraPreview(modifier = Modifier.fillMaxSize())
                     }
-                    Text("${audioVM.demoNum}======${frameCount}")
+                    Text("${audioVM.demoNum}")
                 }
 
                 BottomBar(
