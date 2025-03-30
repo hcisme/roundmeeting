@@ -3,7 +3,6 @@ package com.chc.roundmeeting.component
 import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -25,7 +24,6 @@ fun CameraPreview(
     val lifecycleOwner = LocalLifecycleOwner.current
     val videoVM = viewModel<VideoViewModel>(context as MainActivity)
     val previewView = remember { PreviewView(context) }
-    val cameraProvider = remember { ProcessCameraProvider.getInstance(context).get() }
 
     AndroidView(
         modifier = modifier,
@@ -42,8 +40,8 @@ fun CameraPreview(
             }
 
             try {
-                cameraProvider?.unbindAll()
-                cameraProvider?.bindToLifecycle(
+                videoVM.cameraProvider?.unbindAll()
+                videoVM.cameraProvider?.bindToLifecycle(
                     lifecycleOwner,
                     cameraSelector,
                     preview,

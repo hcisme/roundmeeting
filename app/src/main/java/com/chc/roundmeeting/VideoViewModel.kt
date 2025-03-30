@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class VideoViewModel(application: Application) : AndroidViewModel(application) {
+    val cameraProvider = ProcessCameraProvider.getInstance(getApplication()).get()
     val cameraProviderFuture = ProcessCameraProvider.getInstance(getApplication())
     val videoData = MutableSharedFlow<ByteArray>()
     var frameCount by mutableIntStateOf(0)
@@ -43,7 +44,7 @@ class VideoViewModel(application: Application) : AndroidViewModel(application) {
                         val data = ByteArray(buffer.remaining())
                         buffer.get(data)
                         frameCount += 1
-                        Log.i("@@", frameCount.toString())
+                        Log.i("@@", "$frameCount")
                         viewModelScope.launch {
                             videoData.emit(data)
                         }

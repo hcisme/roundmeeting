@@ -32,7 +32,7 @@ fun Logout(modifier: Modifier = Modifier) {
         modifier = modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .height(52.dp)
+            .height(40.dp)
             .clip(MaterialTheme.shapes.medium)
             .background(CardDefaults.cardColors().containerColor)
             .clickable {

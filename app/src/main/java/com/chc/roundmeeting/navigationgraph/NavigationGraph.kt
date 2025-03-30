@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.chc.roundmeeting.ui.page.home.HomePage
@@ -32,6 +33,7 @@ private val exitTransition = slideOutHorizontally(
 
 @Composable
 fun NavigationGraph(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     val navController = LocalNavController.current
     val sharedPreferences = LocalSharedPreferences.current
 

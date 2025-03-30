@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -23,10 +22,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chc.roundmeeting.AudioViewModel
 import com.chc.roundmeeting.MainActivity
-import com.chc.roundmeeting.VideoViewModel
 import com.chc.roundmeeting.component.CameraPreview
 import com.chc.roundmeeting.component.Dialog
-import com.chc.roundmeeting.services.MeetingService
+import com.chc.roundmeeting.services.floatwindow.FloatingWindowService
 import com.chc.roundmeeting.utils.PermissionPreferenceManager
 import com.chc.roundmeeting.utils.startSettingActivity
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -41,7 +39,6 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
     val audioPermissionState = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val audioVM = viewModel<AudioViewModel>(context as MainActivity)
-    val videoVM = viewModel<VideoViewModel>(context)
     val roomVM = viewModel<RoomViewModel>(context)
     val roomConfig = roomVM.roomConfig
     var isFirstLoad by remember { mutableStateOf(true) }
@@ -65,6 +62,9 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
     }
 
     LaunchedEffect(Unit) {
+        if (FloatingWindowService.intent != null) {
+            FloatingWindowService.stop(context)
+        }
         initPermission()
         initAudio()
     }
@@ -94,13 +94,7 @@ fun MeetingRoomPage(modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                TopBar(
-                    onClickExitText = {
-                        audioVM.recorder.stop()
-                        MeetingService.stop(context)
-                        videoVM.stopCameraProvider()
-                    }
-                )
+                TopBar()
 
                 Box(
                     modifier = Modifier

@@ -22,6 +22,7 @@ cameraLifecycle = "1.4.2"
 cameraCamera2 = "1.4.2"
 cameraView = "1.4.2"
 cameraVideo = "1.4.2"
+lifecycleService = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +53,7 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraCamera2" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
 androidx-camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "cameraVideo" }
+androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleService" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

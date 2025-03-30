@@ -13,7 +13,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.chc.roundmeeting.component.InitialNotificationPermission
 import com.chc.roundmeeting.navigationgraph.NavigationGraph
 import com.chc.roundmeeting.network.Request
 import com.chc.roundmeeting.ui.page.AuthDialog
@@ -39,8 +38,6 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 Request.init(baseUrl = NetworkConstants.BASE_URL, authViewModel = authVM)
             }
-
-            InitialNotificationPermission()
 
             CompositionLocalProvider(
                 LocalNavController provides navController,

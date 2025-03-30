@@ -1,6 +1,7 @@
 package com.chc.roundmeeting.ui.page.meetingroom
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,18 +20,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.chc.roundmeeting.AudioViewModel
 import com.chc.roundmeeting.MainActivity
 import com.chc.roundmeeting.R
-import com.chc.roundmeeting.services.MeetingService
+import com.chc.roundmeeting.VideoViewModel
+import com.chc.roundmeeting.services.floatwindow.FloatingWindowService
 import com.chc.roundmeeting.utils.LocalNavController
 import com.chc.roundmeeting.utils.NumConstants
+import com.chc.roundmeeting.utils.checkOverlayPermission
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(modifier: Modifier = Modifier, onClickExitText: () -> Unit = {}) {
+fun TopBar(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val navController = LocalNavController.current
     val roomVM = viewModel<RoomViewModel>(context as MainActivity)
+    val audioVM = viewModel<AudioViewModel>(context)
+    val videoVM = viewModel<VideoViewModel>(context)
     val roomConfig = roomVM.roomConfig!!
 
     Surface(
@@ -40,19 +46,40 @@ fun TopBar(modifier: Modifier = Modifier, onClickExitText: () -> Unit = {}) {
     ) {
         CenterAlignedTopAppBar(
             navigationIcon = {
-                IconButton(
-                    onClick = {}
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        painter = painterResource(if (roomConfig.isOpenLoudspeaker) R.drawable.loud_speaker else R.drawable.ear),
-                        contentDescription = null
-                    )
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            painter = painterResource(if (roomConfig.isOpenLoudspeaker) R.drawable.loud_speaker else R.drawable.ear),
+                            contentDescription = null
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            checkOverlayPermission(context) {
+                                navController.popBackStack()
+                                if (FloatingWindowService.intent == null) {
+                                    FloatingWindowService.start(context)
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.float_window),
+                            contentDescription = null
+                        )
+                    }
                 }
+
             },
             title = {
                 Box(modifier = Modifier.fillMaxHeight()) {
                     Text(
-                        "腾讯会议",
+                        "会议中",
                         style = MaterialTheme.typography.titleSmall,
                         modifier = Modifier.align(alignment = Alignment.Center)
                     )
@@ -63,7 +90,8 @@ fun TopBar(modifier: Modifier = Modifier, onClickExitText: () -> Unit = {}) {
                 TextButton(
                     shape = MaterialTheme.shapes.small,
                     onClick = {
-                        onClickExitText()
+                        audioVM.recorder.stop()
+                        videoVM.stopCameraProvider()
                         navController.popBackStack()
                     }
                 ) {
